@@ -16,6 +16,7 @@ class NewVistorTest(unittest.TestCase):
         """
         self.browser.quit()
 
+    # A user can access the home page.
     def test_can_start_a_list_and_retrieve_it_later(self):
         """
         """
@@ -23,7 +24,12 @@ class NewVistorTest(unittest.TestCase):
 
         self.assertIn('To-Do', self.browser.title)
 
+        # Comment this out when we are finished with all functional tests.
         self.fail("Finish writing tests.")
+
+    # The user sees a form to add a new todo.
+
+    #
 
 if __name__ == "__main__":
     unittest.main()
