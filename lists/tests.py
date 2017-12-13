@@ -1,6 +1,5 @@
 from django.urls import resolve
 from django.test import TestCase
-from django.http import HttpRequest
 
 from lists.views import home_page
 
@@ -20,8 +19,7 @@ class HomePageTest(TestCase):
         self.assertEqual(found.func, home_page)
 
     def test_home_page_returns_proper_html(self):
-        request = HttpRequest()
-        response = home_page(request)
+        response = self.client.get('/')
         html = response.content.decode('utf8')
         self.assertTrue(html.startswith('<!DOCTYPE html>'))
         self.assertIn('<html>', html)
@@ -29,7 +27,14 @@ class HomePageTest(TestCase):
         self.assertTrue(html.strip().endswith('</html>'))
 
     def test_header_is_displayed(self):
-        request = HttpRequest()
-        response = home_page(request)
+        response = self.client.get('/')
         html = response.content.decode('utf8')
         self.assertIn('<h1>', html)
+
+    def test_home_page_uses_template(self):
+        """
+        This test is the best way to test the home home_page
+        render.  Here we are not testing any constants.
+        """
+        response = self.client.get('/')
+        self.assertTemplateUsed(response, 'home.html')
