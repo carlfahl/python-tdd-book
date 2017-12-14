@@ -18,6 +18,13 @@ class NewVistorTest(unittest.TestCase):
         """
         self.browser.quit()
 
+    def check_table_for_row(self, row_text):
+        """
+        """
+        table = self.browser.find_element_by_id('todos-table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn(row_text, [row.text for row in rows])
+
     # A user can access the home page.
     def test_can_start_a_list_and_retrieve_it_later(self):
         """
@@ -58,14 +65,17 @@ class NewVistorTest(unittest.TestCase):
         # When she hits enter, the page updates, and now the page lists
         # "1: Buy peacock feathers" as an item in a to-do list table
         todo_input.send_keys(Keys.ENTER)
-        time.sleep(2)
-
+        time.sleep(3)
         # A table of todos is displayed to the User
-        table = self.browser.find_element_by_id('todos-table')
-        rows = table.find_elements_by_tag_name('tr')
-        self.assertTrue(
-            any(row.text == '1: Buy peacock feathers' for row in rows)
-        )
+        self.check_table_for_row('1: Buy peacock feathers')
+
+        todo_input = self.browser.find_element_by_id('new_todo_title')
+        todo_input.send_keys('Use peacock feathers to make a fly')
+        todo_input.send_keys(Keys.ENTER)
+        time.sleep(3)
+
+        self.check_table_for_row('1: Buy peacock feathers')
+        self.check_table_for_row('2: Use peacock feathers to make a fly')
 
         # Comment this out when we are finished with all functional tests.
         self.fail("Finish writing tests.")
