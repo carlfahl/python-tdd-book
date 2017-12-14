@@ -38,3 +38,7 @@ class HomePageTest(TestCase):
         """
         response = self.client.get('/')
         self.assertTemplateUsed(response, 'home.html')
+
+    def test_process_a_post_request(self):
+        response = self.client.post('/', data={'item_text': 'A new todo list item'})
+        self.assertIn('A new todo list item', response.content.decode())
